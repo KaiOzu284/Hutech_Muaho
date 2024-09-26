@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!-- Basic -->
+<html lang="en" xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="fragments::head">
+
+</head>
+
+<body>
+
+<!-- Start Cart  -->
+<div class="cart-box-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="checkout">
+                    <div class="title-left">
+                        <h3>Billing address</h3>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username">Username *</label>
+                        <p th:text="${#authentication.principal.username}" id="username">
+                    </div>
+                    <hr class="mb-4">
+                    <hr class="mb-4">
+                    <div class="title"><span>Payment Methods</span></div>
+                    <div class="d-block my-3">
+                        <div class="custom-control custom-radio">
+                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input"
+                                   required>
+                            <label class="custom-control-label" for="debit">Cash</label>
+                        </div>
+                    </div>
+                    <hr class="mb-1">
+                </div>
+            </div>
+            <div class="col-sm-6 col-lg-6 mb-3">
+                <div class="col-md-12 col-lg-12">
+                    <div class="odr-box">
+                        <div class="title-left">
+                            <h3>Shopping cart</h3>
+                        </div>
+                        <div class="rounded p-2 bg-light">
+                            <div class="media mb-2 border-bottom" th:each="item : ${cart.cartItems}">
+                                <div class="media-body"><a href="product-detail.html"
+                                                           th:text="${item.getName()}"> </a>
+                                    <div class="small text-muted">Price: $[[${item.getCostPrice()}]] <span
+                                            class="mx-2">|</span> Qty: [[${item.getQuantity()}]] <span
+                                            class="mx-2">|</span> Subtotal: $[[${item.getCostPrice() * item.getQuantity()}]]
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-12">
+                    <div class="order-box">
+                        <div class="title-left">
+                            <h2><b>Your order</b></h2>
+                        </div>
+                        <div class="d-flex">
+                            <div class="font-weight-bold">Product</div>
+                            <div class="ml-auto font-weight-bold">Total</div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="d-flex">
+                            <h4>Sub Total</h4>
+                            <div class="ml-auto font-weight-bold" th:text="'$' + 100"></div>
+                        </div>
+                        <div class="d-flex">
+                            <h4>Discount</h4>
+                            <div class="ml-auto font-weight-bold"> $0</div>
+                        </div>
+                        <hr class="my-1">
+                        <div class="d-flex">
+                            <h4>Tax</h4>
+                            <div class="ml-auto font-weight-bold"> $2</div>
+                        </div>
+                        <div class="d-flex">
+                            <h4>Shipping Cost</h4>
+                            <div class="ml-auto font-weight-bold"> Free</div>
+                        </div>
+                        <hr>
+                        <div class="d-flex gr-total">
+                            <h5>Grand Total</h5>
+                            <div class="ml-auto h5" th:text="'$' + 100"></div>
+                        </div>
+                        <hr>
+                    </div>
+                </div>
+                <div class="col-12 d-flex shopping-box">
+                    <form action="/sucess" method="POST">
+                        <button type="submit" class="ml-auto btn hvr-hover">Place Order</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
+<style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Cart styles */
+        .cart-box-main {
+            background-color: #f8f8f8;
+            padding: 40px 0;
+        }
+
+        /* Checkout styles */
+        .checkout {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .checkout h3 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+        }
+
+        .checkout label {
+            font-weight: bold;
+        }
+
+        .checkout hr {
+            margin: 20px 0;
+            border-top: 1px solid #eee;
+        }
+
+        .checkout .title {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+            font-size: 18px;
+        }
+
+        .checkout .custom-radio {
+            margin-bottom: 10px;
+        }
+
+        /* Shopping cart styles */
+        .odr-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .odr-box .title-left {
+            margin-bottom: 20px;
+        }
+
+        .odr-box .rounded {
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+
+        .odr-box .media {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .odr-box .media:last-child {
+            border-bottom: none;
+        }
+
+        .odr-box .media a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .odr-box .small {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Order styles */
+        .order-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .order-box h2 {
+            margin-top: 0;
+            color: #333;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .order-box .d-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .order-box hr {
+            margin: 10px 0;
+            border-top: 1px dashed #ccc;
+        }
+
+        .order-box .d-flex h4 {
+            margin: 0;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .order-box .d-flex .ml-auto {
+            margin-left: auto;
+            font-weight: bold;
+        }
+
+        .order-box .d-flex.gr-total {
+            margin-top: 10px;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+
+        .order-box .d-flex.gr-total h5 {
+            margin: 0;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Shopping box styles */
+        .shopping-box {
+            margin-top: 20px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .shopping-box form {
+            margin-left: auto;
+        }
+
+        .shopping-box button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .shopping-box button:hover {
+            background-color: #555;
+        }
+
+        /* Additional styles */
+        .title-left h3 {
+            color: #555;
+        }
+
+        .title-left p {
+            color: #777;
+            font-weight: bold;
+        }
+
+        .custom-radio input[type="radio"]:checked + label {
+            color: #555;
+        }
+
+        .custom-radio input[type="radio"]:checked + label:before {
+            border-color: #555;
+            background-color: #555;
+        }
+
+    </style>

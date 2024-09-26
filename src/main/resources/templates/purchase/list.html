@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1>Danh sách đơn hàng</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên người dùng</th>
+            <th>Tổng chi phí</th>
+            <th sec:authorize="hasAnyAuthority('ADMIN')">Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="purchase : ${purchases}">
+            <td th:text="${purchase.id}"></td>
+            <td th:text="${purchase.username}"></td>
+            <td th:text="${purchase.totalPrice}"></td>
+            <td sec:authorize="hasAnyAuthority('ADMIN')">
+
+                <a class="btn btn-primary" th:href="@{/purchase/delete/{id}(id=${purchase.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

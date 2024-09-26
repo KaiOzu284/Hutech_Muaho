@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý đơn hàng</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1>Danh sách đơn hàng</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên người dùng</th>
+            <th>Tổng chi phí</th>
+            <th>Địa chỉ</th>
+            <th>Chi tiết</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.user.username}"></td>
+            <td th:text="${order.totalPrice}"></td>
+            <td th:text="${order.address}"></td>
+            <!-- Thêm các cột khác tùy ý -->
+            <td>
+                <a th:href="@{/order/details/{orderId}(orderId=${order.id})}">
+                    <button class="btn btn-detail">Chi tiết</button>
+                </a>
+            </td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<th:block th:replace="layout :: footer"></th:block>
+<!-- Đảm bảo rằng bạn đã bao gói thư viện jQuery -->
+<script th:inline="javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script th:inline="javascript">
+    function sendEmail(orderId) {
+        // Sử dụng AJAX để gửi yêu cầu POST tới URL "/send-email" với orderId
+        $.ajax({
+            type: "POST",
+            url: "/send-email",
+            data: { orderId: orderId }, // Truyền orderId
+            success: function(response) {
+                // Xử lý phản hồi từ server nếu cần thiết
+                alert("Email đã được gửi tới chủ của đơn hàng.");
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                alert("Đã xảy ra lỗi khi gửi email.");
+            }
+        });
+    }
+</script>
+
+</body>
+
+</html>
+
+

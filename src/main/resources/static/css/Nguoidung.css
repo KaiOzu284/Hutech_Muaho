@@ -1,0 +1,67 @@
+﻿.dangkydangnhap {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+    .dangkydangnhap a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #ff4e00;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: background-color 0.3s ease;
+    }
+
+        .dangkydangnhap a:hover {
+            background-color: #ff4e00;
+            color: #fff;
+        }
+.tata {
+    position: absolute;
+    top: 50%;
+    right: 5%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+    .tata a {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #ff4e00;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: background-color 0.3s ease;
+    }
+
+        .tata a:hover {
+            background-color: #ff4e00;
+            color: #fff;
+        }
+
+.thanhmenu a {
+    text-decoration: none;
+    color: white;
+    margin-left: 10px;
+
+    
+}
+
+    .thanhmenu a:hover {
+        color: red;
+    }
+
+.btntimkiem{
+    background-color: red;
+    color: black;
+}
+.btntimkiem:hover{
+    background-color: burlywood;
+    color: blue;
+}

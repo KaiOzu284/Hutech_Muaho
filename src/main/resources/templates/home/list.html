@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Book List</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1 th:text="${title}"></h1>
+    <input type="text" id="searchInput" placeholder="Search category by name...">
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th sec:authorize="hasAnyAuthority('AD')">Action</th>
+        </tr>
+        <tr th:each="book : ${book}" class="book">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.price}"></td>
+            <td th:text="${book.category.name}"></td>
+
+            <td>
+                <form th:action="@{/books/add-to-cart}" method="post" class="d-inline">
+                <input type="hidden" name="id" th:value="${book.getId()}">
+                <input type="hidden" name="name" th:value="${book.getTitle()}">
+                <input type="hidden" name="price" th:value="${book.getPrice()}">
+                <button type="submit" class="btn btn-success" onclick="return confirm(' Bạn là một thiên thần xứng đáng có món này !')"> Lụm Hàng !</button>
+                </form>
+            </td>
+            <td sec:authorize="hasAnyAuthority('AD')">
+                <a th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a> |
+                <a th:href="@{/books/delete/{id}(id=${book.id})}" onclick="return confirm('Are you sure ?')">Delete</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+<script>
+        const searchInput = document.getElementById('searchInput');
+        const products = document.querySelectorAll('.product');
+
+        searchInput.addEventListener('input', function (event) {
+            const searchText = event.target.value.toLowerCase();
+
+            products.forEach(function (product) {
+                const name = product.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                if (title.includes(searchText)) {
+                    product.classList.remove('hidden');
+                } else {
+                    product.classList.add('hidden');
+                }
+            });
+        });
+
+    </script>
+</body>
+
+</html>

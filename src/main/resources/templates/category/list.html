@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Nhà Cung Cấp</title>
+  <th:block th:replace="layout :: link-css"></th:block>
+  <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+  <div th:if = "${size == 0}">
+    <p>Vui lòng thêm nhà cung cấp</p>
+  </div>
+  <div th:if="${errorMessage}" class="alert alert-danger" style="color:black;">
+    <p th:text="${errorMessage}"></p>
+  </div>
+  <button type="button" class="btn btn-primary" data-toggle="modal" onclick="window.location.href='/categories/add'">>
+    Thêm nhà cung cấp
+  </button>
+  <h1 th:text="${title}"></h1>
+  <input type="text" id="searchInput" placeholder="Search category by name...">
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Action</th>
+    </tr>
+    <tr th:each="category : ${categories}" class="category">
+      <td th:text="${category.id}"></td>
+      <td th:text="${category.name}"></td>
+      <td>
+        <a class="btn btn-primary" th:href="@{/categories/edit/{id}(id=${category.id})}">Edit</a> |
+        <a class="btn btn-primary" th:href="@{/categories/delete/{id}(id=${category.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+  </table>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+<script>
+        const searchInput = document.getElementById('searchInput');
+        const categories = document.querySelectorAll('.category');
+
+        searchInput.addEventListener('input', function (event) {
+            const searchText = event.target.value.toLowerCase();
+
+            categories.forEach(function (category) {
+                const name = category.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                if (name.includes(searchText)) {
+                    category.classList.remove('hidden');
+                } else {
+                    category.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

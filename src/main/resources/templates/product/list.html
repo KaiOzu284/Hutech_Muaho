@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <title>Product List</title>
+  <th:block th:replace="layout :: link-css"></th:block>
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+  <div th:if="${products.isEmpty()}">
+    <p>Vui lòng thêm sản phẩm</p>
+  </div>
+  <button type="button" class="btn btn-primary" onclick="window.location.href='/products/add'">
+    Thêm sản phẩm
+  </button>
+  <h1 th:text="${title}"></h1>
+  <input type="text" id="searchInput" placeholder="Search category by name...">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Tên sản phẩm</th>
+      <th>Nhà sản xuất</th>
+      <th>Giá</th>
+      <th>Số lượng</th>
+      <th>Hình ảnh</th>
+      <th sec:authorize="hasAnyAuthority('ADMIN')">Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}" class="product">
+      <td th:text="${product.name}"></td>
+      <td th:text="${product.category.name}"></td>
+      <td th:text="${product.costPrice}"></td>
+      <td th:text="${product.quantity}"></td>
+      <td>
+        <img alt="" th:src="${product.completeImage}" style="width: 100px;height: 100px;">
+      </td>
+      <td sec:authorize="hasAnyAuthority('ADMIN')">
+        <a  class="btn btn-primary" th:href="@{/products/edit/{id}(id=${product.id})}">Edit</a> |
+        <a  class="btn btn-primary" th:href="@{/products/delete/{id}(id=${product.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const products = document.querySelectorAll('.product');
+
+    searchInput.addEventListener('input', function (event) {
+     td:nth-child(2)').textContent.toLowerCase();
+
+        if (name.includes(searchText)) {
+          product.classList.remove('hidden');
+        } else {
+          product.classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

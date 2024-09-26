@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Thêm sản phâm</title>
+  <th:block th:replace="layout :: link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+  <h1>Thêm sản phâm</h1>
+  <form th:action="@{/products/add}" method="POST" enctype="multipart/form-data">
+
+
+    <div class="col-6 mb-3">
+      <label class="form-label" for="name">Tên sản phẩm:</label>
+      <input class="form-control" type="text" th:field="*{product.name}" id="name">
+      <span class="text-danger" th:if="${#fields.hasErrors('product.name')}" th:errors="*{product.name}"></span>
+    </div>
+    <div class="col-6 mb-3">
+      <label class="form-label" for="description">Nội dung:</label>
+      <input class="form-control" type="text" th:field="*{product.description}" id="description">
+    </div>
+    <div class="col-6 mb-3">
+      <label class="form-label" for="costPrice">Gía:</label>
+      <input class="form-control" type="text" th:field="*{product.costPrice}" id="costPrice">
+      <span class ="text-danger" th:if="${#fields.hasErrors('product.costPrice')}" th:errors="*{product.costPrice}"></span>
+    </div>
+    <div class="col-6 mb-3">
+      <label class="form-label" for="quantity">số lượng:</label>
+      <input class="form-control" type="text" th:field="*{product.quantity}" id="quantity">
+      <span class ="text-danger" th:if="${#fields.hasErrors('product.quantity')}" th:errors="*{product.quantity}"></span>
+    </div>
+    <div class="form-group">
+      <label for="image" class="form-label">Image:</label>
+      <input type="file" class="form-control" id="image" required name="image" accept="image/jpeg,image/png,image/gif" multiple/>
+    </div>
+    <div class="col-6 mb-3">
+      <label class="form-label" for="category">Category:</label>
+      <select class="form-control" id="category" name="category.id">
+        <option value="">-- Select Category--</option>
+        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+      </select>
+    </div>
+    <input type="submit" class="btn btn-primary" value="Save">
+  </form>
+  <br>
+  <a  class="btn btn-primary" th:href="@{/books}">Back to List</a>
+</div>
+</body>
+</html>

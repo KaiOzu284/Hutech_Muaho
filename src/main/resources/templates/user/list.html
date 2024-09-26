@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>User List</title>
+  <th:block th:replace="layout :: link-css"></th:block>
+  <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+  <div th:if = "${size == 0}">
+    <p>Vui lòng thêm nhà cung cấp</p>
+  </div>
+  <button type="button" class="btn btn-primary" data-toggle="modal" onclick="window.location.href='/categories/add'">>
+    Thêm nhà cung cấp
+  </button>
+  <h1 th:text="${title}"></h1>
+  <input type="text" id="searchInput" placeholder="Search category by name...">
+  <table class="table">
+    <tr>
+      <th>ID</th>
+      <th>UserName</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Password</th>
+      <th>Role</th>
+      <th>Action</th>
+    </tr>
+    <tr th:each="user : ${users}" class="user">
+      <td th:text="${user.id}"></td>
+      <td th:text="${user.username}"></td>
+      <td th:text="${user.name}"></td>
+      <td th:text="${user.email}"></td>
+      <td th:text="${user.password}"></td>
+      <td>
+            <span th:if="${user.roles}" th:each="role : ${user.roles}">
+                <span th:text="${role.name}"></span>
+            </span>
+        <span th:unless="${user.roles}">N/A</span>
+      </td>
+      <td>
+        <a class="btn btn-primary" th:href="@{/users/delete/{id}(id=${user.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+        <a class="btn btn-primary" th:href="@{/users/edit/{id}(id=${user.id})}">Edit</a>
+      </td>
+    </tr>
+  </table></div>
+<th:block th:replace="layout :: footer"></th:block>
+<script>
+        const searchInput = document.getElementById('searchInput');
+        const categories = document.querySelectorAll('.user');
+
+        searchInput.addEventListener('input', function (event) {
+            const searchText = event.target.value.toLowerCase();
+
+            categories.forEach(function (user) {
+                const name = user.querySelector('td:nth-child(2)').textContent.toLowerCase();
+
+                if (name.includes(searchText)) {
+                    user.classList.remove('hidden');
+                } else {
+                    user.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nhập địa chỉ</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1>Nhập địa chỉ</h1>
+    <form th:action="@{/cart/processAddress}" method="post">
+        <label for="address">Địa chỉ:</label>
+        <input type="text" id="address" name="address" required>
+        <button type="submit">Tiếp tục thanh toán</button>
+    </form>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+</body>
+
+</html>

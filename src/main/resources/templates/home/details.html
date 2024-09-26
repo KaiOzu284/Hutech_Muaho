@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+
+
+
+</head>
+
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1>Chi tiết đơn hàng</h1>
+
+    <!-- Thêm thông báo cho trường hợp không tìm thấy đơn hàng -->
+    <h2 th:if="${order == null}">Đơn hàng không tồn tại</h2>
+
+    <!-- Thêm thông báo cho trường hợp tìm thấy đơn hàng -->
+    <h2 th:unless="${order == null}">Đơn hàng có ID: <span th:text="${order.id}"></span></h2>
+
+    <!-- Kiểm tra và hiển thị danh sách chi tiết đơn hàng -->
+    <table class="table" th:if="${order != null}">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Tên sản phẩm</th>
+            <th>Số lượng</th>
+
+            <!-- Thêm các cột khác tùy ý -->
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="orderItem : ${orderItems}">
+            <td th:text="${orderItem.id}"></td>
+            <td th:text="${orderItem.itemName}"></td>
+            <td th:text="${orderItem.quantity}"></td>
+
+        </tr>
+        <tr>
+            <td colspan="3">
+<!--                <a class="btn btn-danger" href="#" th:onclick="'sendEmail(' + ${order.id} + ');'" th:text="'Giao Hàng'"> Giao Hàng </a>-->
+                <a class="btn btn-danger" href="#" th:onclick="'confirmOrderAndSendEmail(' + ${order.id} + ');'" th:text="'Xác nhận đơn hàng'">Xác nhận đơn hàng</a>
+            </td>
+        </tr>
+
+        </tbody>
+    </table>
+
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+<script th:inline="javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<!-- Các tài nguyên SweetAlert -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+
+
+
+<script th:inline="javascript">
+    function confirmOrderAndSendEmail(orderId) {
+        Swal.fire({
+            title: "Vui lòng chuẩn bị đơn hàng!",
+            html: "Email đã được gửi tới chủ của đơn hàng.",
+            timer: 10000,
+            timerProgressBar: true,
+            showConfirmButton: true,
+            showCancelButton: true,
+            confirmButtonText: "Xác nhận",
+            cancelButtonText: "Hủy",
+            willOpen: () => {
+                Swal.showLoading();
+            },
+            didOpen: () => {
+                setTimeout(() => {
+
+                    Swal.fire("Thành công!", "Email đã được gửi tới chủ của đơn hàng.", "success");
+                    Swal.close();
+
+
+                    // Gọi hàm sendEmail
+                    sendEmail(orderId);
+
+                    // Tạo một biểu mẫu ẩn
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/confirm/' + orderId;
+
+                    // Thêm một trường input để đảm bảo phương thức POST được gửi đi
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = '_method';
+                    input.value = 'POST';
+                    form.appendChild(input);
+
+                    // Thêm biểu mẫu vào trang và tự động submit nó
+                    document.body.appendChild(form);
+                    form.submit();
+
+
+                }, 10000);
+
+            }
+        });
+    }
+</script>
+
+
+
+<script th:inline="javascript">
+    function sendEmail(orderId) {
+
+        // Sử dụng AJAX để gửi yêu cầu POST tới URL "/send-email" với orderId
+        $.ajax({
+            type: "POST",
+            url: "/send-email",
+            data: { orderId: orderId }, // Truyền orderId
+            success: function(response) {
+                // Tạo hộp thoại đang kiểm tra đơn hàng
+                Swal.fire({
+                    title: "Vui lòng ấn nút xác nhận để tiếp hành giao hàng !  ",
+                    html: "Vui lòng chờ trong giây lát...",
+                    timer: 6000,  // Thời gian hiển thị hộp thoại (6 giây)
+                    timerProgressBar: true,
+                    onBeforeOpen: () => {
+                        Swal.showLoading();
+                    },
+                    onClose: () => {
+                        // Hiển thị thông báo "Email đã được gửi"
+                        Swal.fire("Thành công!", "Email đã được gửi tới chủ của đơn hàng.", "success");
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                // Xử lý lỗi nếu có
+                Swal.fire("Lỗi!", "Đã xảy ra lỗi khi gửi email.", "error");
+            }
+
+        });
+
+    }
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chỉnh Sửa User</title>
+    <th:block th:replace="layout :: link-css"></th:block>
+</head>
+<body>
+<th:block th:replace="layout :: header"></th:block>
+<div class="container" th:style="'margin-top: 100px;'">
+    <h1>Edit User</h1>
+    <form th:action="@{/users/edit/{id}(id=${user.id})}" th:object="${user}" method="post">
+        <div class="col-6 mb-3">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" th:field="*{username}" id="username">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-control" type="email" th:field="*{email}" id="email">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-control" type="text" th:field="*{name}" id="name">
+        </div>
+        <div class="col-6 mb-3">
+            <label class="form-label" for="roles">Roles:</label>
+            <select class="form-control" id="roles" name="roles" multiple>
+                <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${user.roles.contains(role)}"></option>
+            </select>
+        </div>
+        <input type="submit" class="btn btn-success" value="Save">
+    </form>
+    <br>
+    <a class="btn btn-primary" th:href="@{/users}">Back to List</a>
+</div>
+<th:block th:replace="layout :: footer"></th:block>
+</body>
+</html>

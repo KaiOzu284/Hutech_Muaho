@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initialscale=1.0">
+  <title>Cart</title>
+  <th:block th:replace="~{layout::link-css}" th:style="'margin-top: 100px;'" ></th:block>
+
+</head>
+<body>
+<th:block th:replace="~{layout::header}"></th:block>
+<div class="container" th:if="${not #lists.isEmpty(cart.cartItems)}" th:style="'margin-top: 100px;'">
+  <table class="table">
+    <thead>
+    <tr>
+      <th scope="col"> Tên sản phẩm</th>
+      <th scope="col"> Số lượng</th>
+      <th scope="col"> Giá tiền</th>
+      <th scope="col"> Tổng giá</th>
+      <th scope="col"> Địa chỉ </th>
+      <th scope="col"> </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${cart.cartItems}">
+      <td th:text="${item.getName()}"></td>
+      <td>
+        <form method="post" action="/cart/updateCart">
+          <input type="hidden" name="itemId" th:value="${item.getId()}">
+          <input type="number" min="1"
+                 name="quantity"
+                 th:value="${item.getQuantity()}"
+                 th:attr="data-id=${item.getId()}"
+                 class="form-control quantity">
+          <button type="submit" class="btn btn-danger">Update Cart</button>
+
+        </form>
+      </td>
+
+      <td th:text="${#numbers.formatDecimal(item.getCostPrice(), 0, 3)} + 'VNĐ'"></td>
+      <td th:text="${#numbers.formatDecimal(item.getCostPrice() * item.getQuantity() , 0, 3)} + 'VNĐ '"></td>
+
+      <td>
+        <a class="btn btn-danger"
+           th:href="@{/cart/removeFromCart/{id}(id=${item.getId()})}">
+          Remove
+        </a>
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-12">
+<!--      <p th:text="${#numbers.formatDecimal(product.costPrice, 0, 3)} + 'VNĐ '"></p>-->
+      <h3>Tổng thanh toán:  <span th:text="${#numbers.formatDecimal(totalPrice, 0, 3)}   "></span> VNĐ </h3>
+    </div>
+
+    <div class="col-md-12 text-center">
+      <!--          <a class="btn btn-success"
+              th:href="@{/cart/enterAddress}">Checkout</a>-->
+      <a class="btn btn-success" th:href="@{/pays}">
+        <img src="/AnhSanPham/paypal.png" alt="PayPal" style="width: 100px; height: auto;" />
+        Thanh toán trước
+      </a>
+      <a class="btn btn-success"
+         th:href="@{/cart/enterAddress}">Thanh toán khi nhận hàng  </a>
+      <a class="btn btn-danger"
+         th:href="@{/cart/clearCart}"> Xóa giỏ hàng </a>
+    </div>
+  </div>
+</div>
+<div class="container" th:if="${#lists.isEmpty(cart.cartItems)}" th:style="'margin-top: 100px;'">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 offset-md text-center">
+        <h3 class="mt-5"> Bạn chưa có sản phẩm trong giỏ ! </h3>
+        <p class="lead"> Xin vui lòng thêm sản phẩm vào giỏ hàng !</p>
+        <a class="btn btn-primary" href="/homes">Quay lại trang sản phẩm </a>
+      </div></div>
+  </div>
+</div>
+<footer th:fragment="footer">
+  <script th:src="@{/js/bootstrap.min.js}"></script>
+</footer>
+</body>
+</html>

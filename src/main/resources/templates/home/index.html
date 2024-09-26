@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Hutech Order</title>
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Catamaran:100,200,300,400,500,600,700,800,900" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link th:href="@{/css/styles.css}" rel="stylesheet" />
+    <link th:href="@{/css/Nguoidung.css}" rel="stylesheet" />
+    <link th:href="@{/css/display.css}" rel="stylesheet" />
+    <link th:href="@{/css/muluc.css}" rel="stylesheet" />
+    <link th:href="@{/css/tieude.css}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+
+
+</head>
+
+<body id="page-top">
+<th:block th:replace="~{layout :: header}"></th:block>
+<!-- Header-->
+<header class="masthead bg-image text-center text-white" id="hinhnen"  style="width: 100vw; height: 40vh;">
+    <div class="masthead-content">
+        <div class="container px-10">
+            <h1 class="masthead-heading mb-0" style="color: #ff5733; font-size: 36px;">Thức ăn nhanh mà xịn </h1>
+            <h2 class="masthead-subheading mb-0">ngon - bổ - rẻ</h2>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <div class="empty-message" th:if="${size == 0}">
+        <p>Danh sách sản phẩm</p>
+    </div>
+
+    <h2 >Danh sách sản phẩm</h2>
+    <input type="text" id="searchInput" placeholder="Tìm nhanh sản phẩm...">
+    <div class="product-container">
+        <div th:each="product : ${products}" class="product">
+            <div class="product-item">
+                <img th:src="${product.completeImage}" alt="Product Image" style="width: 230px;height: 230px;" onclick="viewProductDetails('${product.id}')">
+                <div class="product-info">
+                    <h3 th:text="${product.name}"></h3>
+                    <p th:text="${#numbers.formatDecimal(product.costPrice, 0, 3)} + 'VNĐ '"></p>
+                    <form th:action="@{/homes/add-to-cart}" method="post" class="d-inline">
+                        <input type="hidden" th:value="${product.id}" name="id">
+                        <input type="hidden" name="name" th:value="${product.getName()}">
+                        <input type="hidden" name="costPrice" th:value="${product.getCostPrice()}">
+                        <input type="hidden" name="productImage" th:value="${product.completeImage}">
+                        <div class="add-to-cart" style="text-align: center;">
+                            <button type="submit" class="btn btn-success" onclick="return confirm(' Bạn là một thiên thần xứng đáng có món này !')"> Thêm vào giỏ !</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>Về chúng tôi</h3>
+                <p>Chúng tôi mang đến cho bạn một dịch vụ Giao hàng cộng đồng nhanh nhất có thể ! </p>
+            </div>
+            <div class="col">
+                <h3>Thông tin liên hệ</h3>
+                <p>Địa chỉ: Tăng Nhơn Phú B, Tp.Thủ Đức, Thành Phố Hồ Chí Minh</p>
+                <p>Email: nhonnguyen2901@gmail.com</p>
+                <p>Phone: (+84)-777-777-7777</p>
+            </div>
+            <div class="col">
+                <h3>Theo dõi chúng tôi</h3>
+                <ul class="social-media">
+                    <li class="facebook"><a href="https://www.facebook.com/n2b299"><i class="fab fa-facebook"></i></a></li>
+                    <li class="instagram"><a href="https://www.facebook.com/n2b299"><i class="fab fa-instagram"></i></a></li>
+                    <li class="youtube"><a href="https://www.facebook.com/n2b299"><i class="fab fa-youtube"></i></a></li>
+                    <li>  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1959.2157814787145!2d106.78556839466918!3d10.854743712867226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3175276e7ea103df%3A0xb6cf10bb7d719327!2sHUTECH%20University%20-%20Thu%20Duc%20Campus!5e0!3m2!1sen!2s!4v1703606807662!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2023 Hutech Order. All rights reserved.</p>
+    </div>
+</footer>
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const productList = document.querySelectorAll('.product-item');
+
+    searchInput.addEventListener('input', function (event) {
+        const searchText = event.target.value.toLowerCase();
+
+        productList.forEach(function (product) {
+            const name = product.querySelector('h3').textContent.toLowerCase();
+
+            if (name.includes(searchText)) {
+                product.style.display = 'block';
+            } else {
+                product.style.display = 'none';
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
+
